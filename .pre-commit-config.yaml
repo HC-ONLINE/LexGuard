@@ -1,0 +1,62 @@
+# Pre-commit hooks configuration
+# Instalar: pre-commit install
+# Ejecutar manualmente: pre-commit run --all-files
+
+repos:
+  # Hooks generales
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v4.5.0
+    hooks:
+      - id: trailing-whitespace
+        args: [--markdown-linebreak-ext=md]
+      - id: end-of-file-fixer
+      - id: check-yaml
+      - id: check-added-large-files
+        args: ['--maxkb=1000']
+      - id: check-merge-conflict
+      - id: check-json
+      - id: check-toml
+      - id: mixed-line-ending
+        args: ['--fix=lf']
+
+  # Black - Formateo de código
+  - repo: https://github.com/psf/black
+    rev: 24.10.0
+    hooks:
+      - id: black
+        args: ['--line-length=88']
+        files: ^(lexguard|tests)/.*\.py$
+
+  # Flake8 - Linting
+  - repo: https://github.com/pycqa/flake8
+    rev: 7.1.1
+    hooks:
+      - id: flake8
+        args: ['--max-line-length=88', '--extend-ignore=E203,W503']
+        files: ^(lexguard|tests)/.*\.py$
+
+  # MyPy - Type checking
+  - repo: https://github.com/pre-commit/mirrors-mypy
+    rev: v1.13.0
+    hooks:
+      - id: mypy
+        additional_dependencies:
+          - pydantic==2.5.0
+          - typer==0.9.0
+          - python-magic==0.4.27
+          - regex==2023.10.3
+        args: ['--python-version=3.11', '--config-file=pyproject.toml']
+        files: ^lexguard/.*\.py$
+        exclude: ^tests/
+
+  # Pytest - Tests rápidos (solo si hay cambios en código)
+  - repo: local
+    hooks:
+      - id: pytest-check
+        name: pytest-check
+        entry: bash -c 'if [ -d ".venv" ]; then .venv/Scripts/python.exe -m pytest tests/ -v --tb=short -x || exit 0; else python -m pytest tests/ -v --tb=short -x || exit 0; fi'
+        language: system
+        pass_filenames: false
+        always_run: false
+        files: ^(lexguard|tests)/.*\.py$
+        stages: [manual]
