@@ -47,19 +47,32 @@ class CreditCardRule(DetectionRule):
 
     # Palabras clave de contexto
     POSITIVE_CONTEXT = {
+        # Contexto transaccional (fuerte, operacional)
+        "payment",
+        "transaction",
+        "billing",
+        "checkout",
+        "purchase",
+        "cvv",
+        "exp",
+        "pago",
+        "transaccion",
+        # Contexto descriptivo (débil, genérico)
         "card",
         "credit",
+        "customer",
+        "account",
+        # Brands (informativo, ya cubierto por validadores)
         "visa",
         "mastercard",
         "amex",
-        "payment",
-        "billing",
+        # Abbreviations
         "cc",
-        "cvv",
-        "exp",
+        # Español
         "tarjeta",
         "credito",
-        "pago",
+        "cliente",
+        "cuenta",
     }
 
     NEGATIVE_CONTEXT = {
