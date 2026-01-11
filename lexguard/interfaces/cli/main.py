@@ -10,6 +10,7 @@ from lexguard import __version__
 from lexguard.core.scanner import Scanner
 from lexguard.core.rules.credit_card import CreditCardRule
 from lexguard.core.reporting.json_report import ReportGenerator
+from lexguard.interfaces.cli.report_formats import OutputFormat
 
 
 app = typer.Typer(
@@ -39,8 +40,11 @@ def scan(
     path: Path = typer.Argument(
         ..., help="Archivo o directorio a escanear", exists=True, resolve_path=True
     ),
-    format: str = typer.Option(
-        "json", "--format", "-f", help="Formato de salida (json o md)"
+    format: OutputFormat = typer.Option(
+        OutputFormat.json,
+        "--format",
+        "-f",
+        help="Formato de salida",
     ),
     output: Optional[Path] = typer.Option(
         None, "--output", "-o", help="Ruta del archivo de salida (por defecto: stdout)"
@@ -82,10 +86,6 @@ def scan(
         # Ajustar umbral de confianza
         lexguard scan ./code --confidence-threshold 0.9
     """
-    # Validar formato
-    if format not in ["json", "md"]:
-        typer.echo(f"Error: Formato inválido '{format}'. Use 'json' o 'md'.", err=True)
-        raise typer.Exit(1)
 
     # Inicializar scanner con reglas
     rules = [
@@ -130,14 +130,14 @@ def scan(
     )
 
     # Generar salida del reporte
-    if format == "json":
+    if format is OutputFormat.json:
         if output:
             report.to_json_file(output)
             typer.echo(f"Reporte escrito en: {output}")
         else:
             typer.echo(report.model_dump_json(indent=2))
 
-    elif format == "md":
+    elif format is OutputFormat.md:
         md_content = report_gen.generate_markdown(report)
         if output:
             with open(output, "w", encoding="utf-8") as f:
