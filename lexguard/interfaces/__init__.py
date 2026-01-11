@@ -1,0 +1,1 @@
+"""Capa de interfaz (CLI)"""
