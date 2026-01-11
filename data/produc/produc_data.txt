@@ -1,0 +1,77 @@
+# ============================================================
+# LexGuard — PII test samples
+# Each section indicates EXPECTED risk classification
+# ============================================================
+
+
+# ------------------------------------------------------------
+# RIESGO BAJO
+# Casos que NO deberían disparar alertas o deben ser ignorados
+# ------------------------------------------------------------
+
+# Random numbers (no Luhn, no context)
+1234567812345678
+9999888877776666
+
+# Test / sandbox card ranges (commonly whitelisted)
+4111111111111111
+4000000000000000
+
+# Masked or partial numbers
+**** **** **** 1234
+4532-****-****-0366
+Card ending in 4444
+
+# UUIDs and look-alikes
+123e4567-e89b-12d3-a456-426614174000
+4532-0151-1283-0366-abcd-ef12
+
+# Noise with separators
+4532 0151 1283
+
+
+# ------------------------------------------------------------
+# RIESGO MEDIO
+# Coincidencias técnicas sin contexto fuerte
+# ------------------------------------------------------------
+
+# Luhn-valid credit cards without semantic context
+4532015112830366
+5555555555554444
+378282246310005
+
+# Credit cards with weak context
+Possible card: 4532015112830366
+Backup payment number 5555555555554444
+
+# Cards with formatting variations
+4532-0151-1283-0366
+3782 822463 10005
+
+# Numbers inside logs
+INFO 2024-01-01 transaction=4532015112830366 status=OK
+
+
+# ------------------------------------------------------------
+# RIESGO ALTO
+# PII clara con contexto semántico fuerte
+# ------------------------------------------------------------
+
+# Explicit credit card mentions
+credit card number: 4532015112830366
+card=5555555555554444
+cc: 378282246310005
+
+# Payment-related context
+Payment processed: 4532015112830366
+Corporate Amex: 378282246310005
+Customer VISA 4532015112830366 approved
+
+# With expiration / extra signals
+credit card number: 4532015112830366 exp 12/25
+card 5555555555554444 cvv 123
+
+# Production-like artifacts
+# WARNING: simulated production backup
+db_dump.sql:
+INSERT INTO payments(card_number) VALUES ('4532015112830366');
