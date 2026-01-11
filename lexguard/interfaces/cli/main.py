@@ -5,7 +5,6 @@ CLI de LexGuard — Punto de entrada principal.
 from pathlib import Path
 from typing import Optional
 import typer
-from typing_extensions import Annotated
 
 from lexguard import __version__
 from lexguard.core.scanner import Scanner
@@ -20,75 +19,51 @@ app = typer.Typer(
 )
 
 
-def version_callback(value: bool):
-    """Mostrar versión y salir"""
-    if value:
+@app.callback()
+def main(
+    version: bool = typer.Option(
+        False,
+        "--version",
+        "-v",
+        help="Mostrar versión y salir",
+    ),
+):
+    """LexGuard — Escáner de PII para datos colombianos"""
+    if version:
         typer.echo(f"LexGuard v{__version__}")
         raise typer.Exit()
 
 
-@app.callback()
-def main(
-    version: Annotated[
-        Optional[bool],
-        typer.Option(
-            "--version",
-            "-v",
-            callback=version_callback,
-            is_eager=True,
-            help="Mostrar versión y salir",
-        ),
-    ] = None
-):
-    """LexGuard — Escáner de PII para datos colombianos"""
-    pass
-
-
 @app.command()
 def scan(
-    path: Annotated[
-        Path,
-        typer.Argument(
-            help="Archivo o directorio a escanear", exists=True, resolve_path=True
-        ),
-    ],
-    format: Annotated[
-        str, typer.Option("--format", "-f", help="Formato de salida (json o md)")
-    ] = "json",
-    output: Annotated[
-        Optional[Path],
-        typer.Option(
-            "--output", "-o", help="Ruta del archivo de salida (por defecto: stdout)"
-        ),
-    ] = None,
-    confidence_threshold: Annotated[
-        float,
-        typer.Option(
-            "--confidence-threshold",
-            "-c",
-            help="Confianza mínima para reportar (0.0-1.0)",
-            min=0.0,
-            max=1.0,
-        ),
-    ] = 0.8,
-    mask_output: Annotated[
-        bool, typer.Option("--mask-output", help="Enmascarar valores PII en la salida")
-    ] = True,
-    fail_on_high_risk: Annotated[
-        bool,
-        typer.Option(
-            "--fail-on-high-risk",
-            help="Salir con código de error si existen hallazgos de ALTO riesgo",
-        ),
-    ] = False,
-    recursive: Annotated[
-        bool,
-        typer.Option(
-            "--recursive/--no-recursive",
-            "-r",
-            help="Buscar recursivamente en subdirectorios",
-        ),
-    ] = True,
+    path: Path = typer.Argument(
+        ..., help="Archivo o directorio a escanear", exists=True, resolve_path=True
+    ),
+    format: str = typer.Option(
+        "json", "--format", "-f", help="Formato de salida (json o md)"
+    ),
+    output: Optional[Path] = typer.Option(
+        None, "--output", "-o", help="Ruta del archivo de salida (por defecto: stdout)"
+    ),
+    confidence_threshold: float = typer.Option(
+        0.8,
+        "--confidence-threshold",
+        "-c",
+        min=0.0,
+        max=1.0,
+        help="Confianza mínima para reportar (0.0-1.0)",
+    ),
+    mask_output: bool = typer.Option(
+        True, "--mask-output", help="Enmascarar valores PII en la salida"
+    ),
+    fail_on_high_risk: bool = typer.Option(
+        False,
+        "--fail-on-high-risk",
+        help="Salir con código de error si existen hallazgos de ALTO riesgo",
+    ),
+    recursive: bool = typer.Option(
+        True, "--recursive", "-r", help="Buscar recursivamente en subdirectorios"
+    ),
 ):
     """
     Escanear archivos en busca de PII colombiana.
