@@ -1,0 +1,13 @@
+# Ignora archivos y directorios comunes que no deben ser escaneados por Trivy
+.git
+__pycache__
+*.pyc
+*.pyo
+*.pyd
+*.db
+*.sqlite3
+*.egg-info/
+build/
+dist/
+.venv/
+.eggs/
