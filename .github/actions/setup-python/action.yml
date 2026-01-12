@@ -14,5 +14,7 @@ runs:
       shell: bash
       run: |
         python -m pip install --upgrade pip
-        pip install .
-        pip install black flake8 mypy pytest codecov
+        # Instalamos el paquete en modo editable y sus dependencias
+        pip install -e .
+        # Instalamos las herramientas de calidad y las dependencias que MyPy necesita explícitamente
+        pip install black flake8 mypy pytest pytest-cov pydantic typer python-magic regex
