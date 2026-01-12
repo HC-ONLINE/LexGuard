@@ -231,7 +231,7 @@ class RiskAggregator:
 
     @staticmethod
     def calculate_overall_risk(
-        findings: Sequence[tuple[Candidate | None, RiskLevel | str]]
+        findings: Sequence[tuple[Candidate | None, RiskLevel | str]],
     ) -> RiskLevel:
         """
         Calcular riesgo general desde múltiples hallazgos.
@@ -261,7 +261,7 @@ class RiskAggregator:
 
     @staticmethod
     def group_by_risk(
-        findings: Sequence[tuple[Candidate | None, RiskLevel | str]]
+        findings: Sequence[tuple[Candidate | None, RiskLevel | str]],
     ) -> dict[str, list[Candidate]]:
         """
         Agrupar hallazgos por nivel de riesgo.

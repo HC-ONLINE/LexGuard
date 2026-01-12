@@ -133,7 +133,7 @@ class FileStream:
             # Verificar firmas binarias comunes
             if header.startswith(b"\x89PNG"):
                 return "image/png"
-            elif header.startswith(b"\xFF\xD8\xFF"):
+            elif header.startswith(b"\xff\xd8\xff"):
                 return "image/jpeg"
             elif header.startswith(b"PK\x03\x04"):
                 return "application/zip"
