@@ -12,12 +12,12 @@ WORKDIR /app
 COPY pyproject.toml .
 COPY README.md .
 
+# Copiar el código fuente
+COPY lexguard/ ./lexguard/
+
 # Instalar pip y dependencias del proyecto
 RUN pip install --upgrade pip \
     && pip install .
-
-# Copiar el código fuente
-COPY lexguard/ ./lexguard/
 
 # Copiar el entrypoint CLI
 COPY lexguard/interfaces/cli/main.py ./lexguard/interfaces/cli/main.py
