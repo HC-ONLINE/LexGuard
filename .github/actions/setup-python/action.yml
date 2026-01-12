@@ -1,0 +1,17 @@
+name: 'Setup Python Environment'
+description: 'Configura Python y dependencias con cache'
+
+runs:
+  using: "composite"
+  steps:
+    - name: Configurar Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.11'
+        cache: 'pip'
+
+    - name: Instalar dependencias
+      shell: bash
+      run: |
+        python -m pip install --upgrade pip
+        pip install .
