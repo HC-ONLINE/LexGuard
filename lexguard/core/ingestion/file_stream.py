@@ -66,6 +66,7 @@ class FileStream:
         "application/sql",
         "application/x-sql",
         "application/x-log",  # Archivos de log con prefijo application
+        "inode/x-empty",  # Archivos vacíos (Linux)
     }
 
     def __init__(self, chunk_size: int = 8192):
