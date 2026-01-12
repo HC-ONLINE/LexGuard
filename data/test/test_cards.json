@@ -1,0 +1,11 @@
+[
+  {"cliente": "Juan", "comentario": "credit card number: 4532015112830366 exp 12/25", "tarjeta": "4532015112830366"},
+  {"cliente": "Ana", "comentario": "card=5555555555554444", "tarjeta": "5555555555554444"},
+  {"cliente": "Pedro", "comentario": "Customer VISA 4532015112830366 approved", "tarjeta": "4532015112830366"},
+  {"cliente": "Maria", "comentario": "credit card number: 4532015112830366", "tarjeta": "4532015112830366"},
+  {"cliente": "Luis", "comentario": "card 5555555555554444 cvv 123", "tarjeta": "5555555555554444"},
+  {"cliente": "Sofia", "comentario": "Possible card: 4532015112830366", "tarjeta": "4532015112830366"},
+  {"cliente": "Carlos", "comentario": "Backup payment number 5555555555554444", "tarjeta": "5555555555554444"},
+  {"cliente": "Elena", "comentario": "4532-0151-1283-0366", "tarjeta": "4532-0151-1283-0366"},
+  {"cliente": "Rosa", "comentario": "4532015112830366", "tarjeta": "4532015112830366"}
+]

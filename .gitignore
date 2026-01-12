@@ -44,6 +44,7 @@ htmlcov/
 *.json
 *.md
 !README.md
+!data/**
 
 # OS
 .DS_Store
