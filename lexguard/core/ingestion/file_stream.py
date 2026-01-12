@@ -49,11 +49,23 @@ class FileStream:
         "text/html",
         "text/xml",
         "text/csv",
+        "text/x-csv",  # Variante alternative
+        "text/x-log",  # Archivos de log con prefijo text
+        "text/json",  # JSON con prefijo text (poco común pero válido)
+        "application/csv",
+        "application/x-csv",
+        "application/vnd.ms-excel",  # Excel y CSV en Excel
         "application/json",
+        "application/x-json",  # Variante JSON legacy
         "application/xml",
         "application/javascript",
         "application/x-sh",
         "application/x-python",
+        "application/x-yaml",
+        "application/yaml",
+        "application/sql",
+        "application/x-sql",
+        "application/x-log",  # Archivos de log con prefijo application
     }
 
     def __init__(self, chunk_size: int = 8192):
@@ -62,6 +74,10 @@ class FileStream:
             chunk_size: Tamaño del buffer para lectura de archivos (bytes)
         """
         self.chunk_size = chunk_size
+
+        # Inicializar mimetypes SIEMPRE (respaldo, necesario en Windows)
+        mimetypes.init()
+
         # Inicializar instancia de magic solo si está disponible
         self.magic: Optional[Any]
         if HAS_MAGIC and magic is not None:
@@ -72,10 +88,6 @@ class FileStream:
                 self.magic = None
         else:
             self.magic = None
-
-        # Inicializar mimetypes para respaldo
-        if not HAS_MAGIC:
-            mimetypes.init()
 
     def get_file_info(self, file_path: Path) -> FileInfo:
         """
@@ -95,16 +107,17 @@ class FileStream:
 
         # Detectar tipo MIME
         mime_type: str
+
+        # Estrategia 1: Intentar magic primero (si disponible)
         if HAS_MAGIC and self.magic:
-            mime_type = self.magic.from_file(str(file_path))
+            try:
+                mime_type = self.magic.from_file(str(file_path))
+            except Exception:
+                # Si magic falla, caer al respaldo
+                mime_type = self._get_mime_fallback(file_path)
         else:
-            # Respaldo: adivinar desde extensión
-            guessed_mime, _ = mimetypes.guess_type(str(file_path))
-            if guessed_mime:
-                mime_type = guessed_mime
-            else:
-                # Intentar leer primeros bytes para detectar texto
-                mime_type = self._guess_mime_from_content(file_path)
+            # Estrategia 2: mimetypes (siempre disponible)
+            mime_type = self._get_mime_fallback(file_path)
 
         is_text = self._is_text_file(mime_type)
         size_bytes = file_path.stat().st_size
@@ -112,6 +125,21 @@ class FileStream:
         return FileInfo(
             path=file_path, mime_type=mime_type, is_text=is_text, size_bytes=size_bytes
         )
+
+    def _get_mime_fallback(self, file_path: Path) -> str:
+        """
+        Estrategia de respaldo: adivinar MIME desde extensión + contenido.
+
+        Returns:
+            Cadena de tipo MIME
+        """
+        # Primero intentar por extensión (mimetypes está inicializado)
+        guessed_mime, _ = mimetypes.guess_type(str(file_path))
+        if guessed_mime:
+            return guessed_mime
+
+        # Si mimetypes no puede adivinar, leer contenido
+        return self._guess_mime_from_content(file_path)
 
     def _is_text_file(self, mime_type: str) -> bool:
         """Verificar si el tipo MIME indica un archivo de texto"""
@@ -122,6 +150,7 @@ class FileStream:
     def _guess_mime_from_content(self, file_path: Path) -> str:
         """
         Adivinar tipo MIME leyendo primeros bytes (respaldo).
+        Se usa solo cuando mimetypes no puede determinar el tipo.
 
         Returns:
             Cadena de tipo MIME
@@ -130,7 +159,10 @@ class FileStream:
             with open(file_path, "rb") as f:
                 header = f.read(512)
 
-            # Verificar firmas binarias comunes
+            if not header:
+                return "text/plain"  # Archivo vacío = texto
+
+            # Verificar firmas binarias específicas
             if header.startswith(b"\x89PNG"):
                 return "image/png"
             elif header.startswith(b"\xff\xd8\xff"):
@@ -139,20 +171,31 @@ class FileStream:
                 return "application/zip"
             elif header.startswith(b"%PDF"):
                 return "application/pdf"
+            elif header.startswith(b"\x7fELF"):
+                return "application/x-elf"
+            elif header.startswith(b"MZ"):
+                return "application/x-msdownload"
 
-            # Intentar decodificar como texto
-            try:
-                header.decode("utf-8")
-                return "text/plain"
-            except UnicodeDecodeError:
+            # Si parece tener muchos bytes nulos, probablemente es binario
+            null_ratio = header.count(b"\x00") / len(header)
+            if null_ratio > 0.3:
+                return "application/octet-stream"
+
+            # Intentar decodificar como texto (más tolerante)
+            for encoding in ["utf-8", "latin-1", "cp1252"]:
                 try:
-                    header.decode("latin-1")
+                    header.decode(encoding)
+                    # Se decodificó exitosamente → es texto
                     return "text/plain"
-                except UnicodeDecodeError:
-                    return "application/octet-stream"
+                except (UnicodeDecodeError, LookupError):
+                    continue
+
+            # Como último recurso: asumir texto (reduce falsos negativos)
+            return "text/plain"
 
         except Exception:
-            return "text/plain"  # Asumir texto como respaldo
+            # Error al leer = asumir texto para no perder hallazgos
+            return "text/plain"
 
     def stream_lines(self, file_path: Path) -> Iterator[Tuple[int, str]]:
         """
