@@ -1,0 +1,46 @@
+# ============================================================
+# LexGuard — PII test samples (Cédula de ciudadanía colombiana)
+# Each section indicates EXPECTED risk classification
+# ============================================================
+
+
+# ------------------------------------------------------------
+# RIESGO BAJO
+# ------------------------------------------------------------
+
+# Short or obviously invalid numbers
+1234567
+987654321
+111111111
+000000000
+
+# Masked or partial forms
+***-***-789
+CC ending 789
+
+
+# ------------------------------------------------------------
+# RIESGO MEDIO
+# ------------------------------------------------------------
+
+# Numeric sequences with separators or formatting
+1023456789
+1.023.456.789
+1 023 456 789
+
+# Mentions without strong context
+Possible id: 1023456789
+Registro: 1023456789 en logs
+
+
+# ------------------------------------------------------------
+# RIESGO ALTO
+# ------------------------------------------------------------
+
+Cédula: 1023456789
+Documento de identificación: 1023456789
+cc 1023456789
+identificacion 1.023.456.789
+
+db_dump.sql:
+INSERT INTO ciudadanos(cedula) VALUES ('1023456789');

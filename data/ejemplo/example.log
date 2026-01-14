@@ -1,0 +1,9 @@
+2026-01-13 08:15:23,123 INFO  [payments] transaction=4532015112830366 status=OK user=juan
+2026-01-13 08:15:24,456 WARN  [ingest] Suspicious input: card=5555555555554444 source=upload
+2026-01-13 09:02:11,789 ERROR [db] Failed to insert record id=1023456789 error=duplicate_key
+2026-01-13 09:05:00,001 INFO  [auth] login successful user_id=1023456789 ip=192.168.1.10
+2026-01-13 09:06:10,500 INFO  [contact] phone=+573001234567 email=cliente@dominio.com
+
+# NOTA:
+# - Para crear archivos por regla (ej: `credit_card`, `cedula_co`, `phone_co`, `email`) copie este archivo y reemplace/ajuste ejemplos.
+# - Mantén secciones de riesgo para facilitar pruebas y validación de reglas.

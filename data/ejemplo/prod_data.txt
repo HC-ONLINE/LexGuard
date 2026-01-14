@@ -1,0 +1,30 @@
+# Ejemplo de datos de producción (plantilla)
+# Datos simulados para reproducir escenarios realistas
+# Estructura: casos reales anonimizados basados en producción
+
+# Registros de transacciones
+Usuario: john.doe@company.com
+Documento: 1023456789
+CC: 4532015112830366
+Fecha: 2026-01-13
+Estado: Completada
+
+Cédula del cliente: 8765432109
+Tarjeta: 5425233010103442
+Contacto: +57 310 5551234
+Referencia: ORD-2026-001234
+
+ID Empleado: 1234567890
+Email Corporativo: employee@company.local
+Teléfono: +57 320 6661234
+Proyecto: P2026-SEC-0456
+
+# Registros de auditoría
+[2026-01-13 14:23:45] Usuario 1523456789 accedió a datos sensibles
+[2026-01-13 14:25:12] Tarjeta 4111111111111111 validada exitosamente
+[2026-01-13 14:26:33] Notificación enviada a +57 350 7778888
+
+# Datos de contacto del sistema
+Soporte: support@company.com
+Emergencia: +57 311 9998888
+Facturación: billing@company.com

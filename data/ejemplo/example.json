@@ -1,0 +1,10 @@
+[
+  {"tipo": "credit_card", "comentario": "credit card number: 4532015112830366", "valor": "4532015112830366"},
+  {"tipo": "cedula", "comentario": "Cédula: 1023456789", "valor": "1023456789"},
+  {"tipo": "email", "comentario": "email: cliente@dominio.com", "valor": "cliente@dominio.com"},
+  {"tipo": "phone", "comentario": "phone: +57 300 1234567", "valor": "+573001234567"},
+  {
+  "_comment": "# NOTA:",
+  "_comment_2": "# - Para crear archivos por regla (ej: `credit_card`, `cedula_co`, `phone_co`, `email`) copie este archivo y reemplace/ajuste ejemplos.",
+  "_comment_3": "# - Mantén secciones de riesgo para facilitar pruebas y validación de reglas."}
+]

@@ -48,7 +48,7 @@ class TestFileStreamMimeDetection:
 
     def test_csv_file_detected_as_text(self, file_stream):
         """Verifica que los archivos CSV se identifiquen correctamente como texto"""
-        csv_path = Path("data/test/test_cards.csv")
+        csv_path = Path("data/ejemplo/example.csv")
 
         if not csv_path.exists():
             pytest.skip(f"Archivo de prueba no encontrado: {csv_path}")
@@ -76,7 +76,7 @@ class TestFileStreamMimeDetection:
 
     def test_csv_included_in_collect_files(self, file_stream):
         """Verifica que collect_files incluya archivos CSV"""
-        data_dir = Path("data/test")
+        data_dir = Path("data/ejemplo")
 
         if not data_dir.exists():
             pytest.skip(f"Directorio de prueba no encontrado: {data_dir}")
@@ -91,7 +91,7 @@ class TestFileStreamMimeDetection:
 
     def test_sql_file_detected_as_text(self, file_stream):
         """Verifica que los archivos SQL se identifiquen correctamente como texto"""
-        sql_path = Path("data/test/test_cards.sql")
+        sql_path = Path("data/ejemplo/example.sql")
 
         if not sql_path.exists():
             pytest.skip(f"Archivo de prueba no encontrado: {sql_path}")
@@ -118,7 +118,7 @@ class TestFileStreamMimeDetection:
 
     def test_sql_included_in_collect_files(self, file_stream):
         """Verifica que collect_files incluya archivos SQL"""
-        data_dir = Path("data/test")
+        data_dir = Path("data/ejemplo")
 
         if not data_dir.exists():
             pytest.skip(f"Directorio de prueba no encontrado: {data_dir}")
@@ -209,7 +209,7 @@ class TestFileStreamMimeDetection:
 
     def test_txt_file_detected_as_text(self, file_stream):
         """Verifica que los archivos TXT se identifiquen correctamente como texto"""
-        txt_path = Path("data/test/test_data.txt")
+        txt_path = Path("data/ejemplo/example.txt")
 
         if not txt_path.exists():
             pytest.skip(f"Archivo de prueba no encontrado: {txt_path}")
@@ -222,7 +222,7 @@ class TestFileStreamMimeDetection:
 
     def test_collect_files_all_text_types(self, file_stream):
         """Verifica que collect_files incluya todos los tipos de archivos de texto"""
-        data_dir = Path("data/test")
+        data_dir = Path("data/ejemplo")
 
         if not data_dir.exists():
             pytest.skip(f"Directorio de prueba no encontrado: {data_dir}")
@@ -264,4 +264,4 @@ class TestFileStreamEdgeCases:
     def test_directory_raises_error(self, file_stream):
         """Verifica que los directorios lancen ValueError"""
         with pytest.raises(ValueError):
-            file_stream.get_file_info(Path("data/test"))
+            file_stream.get_file_info(Path("data/ejemplo"))

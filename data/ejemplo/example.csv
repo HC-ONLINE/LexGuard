@@ -1,0 +1,13 @@
+tipo,comentario,valor
+credit_card,credit card number: 4532015112830366,4532015112830366
+cedula,Cédula: 1023456789,1023456789
+email,usuario: cliente@dominio.com,cliente@dominio.com
+phone,phone: +57 300 1234567,+573001234567
+# Use este CSV como plantilla para crear CSVs específicos por regla,,
+"
+# NOTA:
+",,
+"# - Para crear archivos por regla (ej: `credit_card`, `cedula_co`, `phone_co`, `email`) copie este archivo y reemplace/ajuste ejemplos.",,
+"
+# - Mantén secciones de riesgo para facilitar pruebas y validación de reglas.
+",,

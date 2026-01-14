@@ -1,0 +1,38 @@
+# Ejemplo de datos de producción (plantilla)
+# Copia y adapta este archivo para crear los datasets específicos por regla
+# Estructura sugerida: separar por secciones de riesgo (BAJO / MEDIO / ALTO)
+
+# ------------------------------------------------------------
+# RIESGO BAJO
+# Casos que NO deberían disparar alertas (ruido, máscaras, ejemplos válidos de sandbox)
+# ------------------------------------------------------------
+# Ejemplos neutros / máscaras / identificadores no válidos
+**** **** **** 1234
+masked: ****-****-1234
+ID: 000000000
+email: user@example.test
+phone: +57 300 0000000
+
+# ------------------------------------------------------------
+# RIESGO MEDIO
+# Coincidencias técnicas sin contexto fuerte
+# ------------------------------------------------------------
+# Valores que cumplen patrones técnicos pero con contexto débil
+1023456789
+4532015112830366
++57 300 1234567
+user@domain.test
+
+# ------------------------------------------------------------
+# RIESGO ALTO
+# PII clara con contexto semántico fuerte
+# ------------------------------------------------------------
+# Etiquetas y textos que indican PII explícita
+Cédula: 1023456789
+credit card number: 4532015112830366 exp 12/25
+email: cliente@dominio.com
+phone: Llamar +57 300 1234567
+
+# NOTA:
+# - Para crear archivos por regla (ej: `credit_card`, `cedula_co`, `phone_co`, `email`) copie este archivo y reemplace/ajuste ejemplos.
+# - Mantén secciones de riesgo para facilitar pruebas y validación de reglas.

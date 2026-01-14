@@ -1,0 +1,7 @@
+[
+  {"cliente": "Juan", "comentario": "Cédula: 1023456789", "cedula": "1023456789"},
+  {"cliente": "Ana", "comentario": "Documento de identificación: 1.023.456.789", "cedula": "1023456789"},
+  {"cliente": "Pedro", "comentario": "identificacion 1023456789", "cedula": "1023456789"},
+  {"cliente": "Maria", "comentario": "Cédula: 987654321", "cedula": "987654321"},
+  {"cliente": "Luis", "comentario": "numero 1234567", "cedula": "1234567"}
+]
