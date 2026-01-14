@@ -9,6 +9,7 @@ import typer
 from lexguard import __version__
 from lexguard.core.scanner import Scanner
 from lexguard.core.rules.credit_card import CreditCardRule
+from lexguard.core.rules.cedula_co import CedulaCORule
 from lexguard.core.reporting.json_report import ReportGenerator
 from lexguard.interfaces.cli.report_formats import OutputFormat
 
@@ -90,6 +91,7 @@ def scan(
     # Inicializar scanner con reglas
     rules = [
         CreditCardRule(),
+        CedulaCORule(),
         # Añadir más reglas según se implementen
     ]
     scanner = Scanner(rules)
