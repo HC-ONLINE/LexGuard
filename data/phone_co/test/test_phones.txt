@@ -1,0 +1,64 @@
+# ============================================================
+# LexGuard — Pruebas de Teléfono Móvil Colombiano
+# Cada sección indica la clasificación de riesgo esperada
+# ============================================================
+
+# ------------------------------------------------------------
+# RIESGO BAJO
+# Números sin contexto (baja confianza)
+# ------------------------------------------------------------
+3001234567
+3051234567
+3101234567
+3151234567
+3201234567
+3231234567
+
+# Números con patrones sospechosos (DROP)
+3000000000
+3001111111
+3001234567
+3109876543
+
+# Números de línea fija (no móviles, DROP)
+2011234567
+2031234567
+
+# Teléfono con demasiados dígitos (DROP)
+30012345678
+
+# Teléfono con muy pocos dígitos (DROP)
+300123456
+
+# ------------------------------------------------------------
+# RIESGO MEDIO
+# Números con contexto débil (0.75)
+# ------------------------------------------------------------
+Teléfono: 3001234567
+Celular: 3051234567
+Contacto móvil: 3101234567
+
++573001234567
++57 300 123 4567
+300-123-4567
+
+Llamar al: 3201234567
+WhatsApp: 3151234567
+
+# ------------------------------------------------------------
+# RIESGO ALTO
+# Números con contexto fuerte (0.80+)
+# ------------------------------------------------------------
+Teléfono celular de contacto: 3001234567
+Móvil de atención: 3051234567
+Comunicarse al: 3101234567
+Número de contacto: 3151234567
+Puede llamar a: 3201234567
+Contacto telefónico: +573001234567
+Celular de referencia: +57 300 123 4567
+Teléfono de emergencia: 300-123-4567
+
+# Números con contexto pero también negativos (0.70)
+Código telefónico: 3001234567
+Referencia: 3051234567
+Serial del teléfono: 3101234567

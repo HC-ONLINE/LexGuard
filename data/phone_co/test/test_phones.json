@@ -1,0 +1,22 @@
+{
+  "contacts": [
+    {
+      "name": "Juan Pérez",
+      "email": "juan@example.com",
+      "phone": "3001234567",
+      "registered": "2026-01-17"
+    },
+    {
+      "name": "María González",
+      "email": "maria@example.com",
+      "phone": "+573051234567",
+      "registered": "2026-01-16"
+    },
+    {
+      "name": "Carlos López",
+      "email": "carlos@example.com",
+      "phone": "310 123 4567",
+      "registered": "2026-01-15"
+    }
+  ]
+}
