@@ -1,21 +1,34 @@
 """
 Validación de prefijos de teléfono móvil colombiano.
-Prefijos móviles válidos: 300-399
+Prefijos móviles válidos por operador: 300-323
+Versionado: V1 solo prefijos confirmados
 """
 
-# Prefijos de teléfono móvil colombiano (actualizados a 2024)
+# Prefijos de teléfono móvil colombiano por operador
 # Fuente: Regulaciones del Ministerio TIC de Colombia
-VALID_PREFIXES = set(range(300, 400))  # 300-399
+# Versionado estáticamente (no se actualiza dinámicamente)
+
+OPERATORS = {
+    "Claro": set(range(300, 305)),  # 300-304
+    "Movistar": set(range(305, 310)),  # 305-309
+    "Tigo": set(range(310, 316)),  # 310-315
+    "WOM": set(range(316, 321)),  # 316-320
+    "Nuevos": set(range(321, 324)),  # 321-323
+}
+
+# Conjunto consolidado de todos los prefijos válidos
+VALID_PREFIXES = set()
+for prefixes in OPERATORS.values():
+    VALID_PREFIXES.update(prefixes)
 
 
 def validate_colombian_prefix(phone_number: str) -> bool:
     """
-    Validar si un número de teléfono colombiano tiene un prefijo
-    móvil válido.
+    Validar si un número de teléfono colombiano tiene un prefijo móvil válido.
 
     Formato de móvil colombiano:
     - Código de país: +57
-    - Prefijo móvil: 300-399 (3 dígitos)
+    - Prefijo móvil: 300-323 (3 dígitos)
     - Número de suscriptor: 7 dígitos
     - Total: 10 dígitos después del código de país
 
@@ -29,9 +42,9 @@ def validate_colombian_prefix(phone_number: str) -> bool:
     Examples:
         >>> validate_colombian_prefix("+573001234567")
         True
-        >>> validate_colombian_prefix("+572001234567")  # Línea fija
+        >>> validate_colombian_prefix("+572001234567")  # Prefijo inválido
         False
-        >>> validate_colombian_prefix("+574991234567")  # Prefijo inválido
+        >>> validate_colombian_prefix("+574991234567")  # Fuera de rango
         False
     """
     # Extraer solo dígitos
