@@ -1,0 +1,69 @@
+# =====================================================
+# ARCHIVO DE PRUEBA: DETECCIÓN DE EMAILS
+# Casos organizados por nivel de riesgo esperado
+# =====================================================
+
+# ─────────────────────────────────────────────────────
+# SECCIÓN 1: EMAILS VÁLIDOS - RIESGO BAJO
+# (contexto técnico/neutral, sin palabras clave sensibles)
+# ─────────────────────────────────────────────────────
+
+Build completed. Notifying build-server@company.com
+Deployment logs sent to devops@infrastructure.net
+Commit authored by developer@opensource.org
+Pipeline notification: ci-cd@automation.com
+Docker image pushed by registry-bot@containers.io
+
+
+# ─────────────────────────────────────────────────────
+# SECCIÓN 2: EMAILS VÁLIDOS - RIESGO MEDIO
+# (sin contexto claro, formato válido)
+# ─────────────────────────────────────────────────────
+
+juan.perez@empresa.com
+maria.rodriguez@company.co
+info@servicio-cliente.com
+carlos+newsletter@portal.net
+support123@help-desk.org
+
+
+# ─────────────────────────────────────────────────────
+# SECCIÓN 3: EMAILS VÁLIDOS - RIESGO ALTO
+# (contexto de usuario real, datos personales)
+# ─────────────────────────────────────────────────────
+
+Email de contacto: carolina.martinez@gmail.com
+Usuario registrado: andres.gomez@hotmail.com
+Correo de notificación: laura.torres@yahoo.com
+Cuenta de usuario: diego.sanchez@outlook.com
+Email para suscripción: patricia.lopez@icloud.com
+Notificación enviada a: roberto.diaz@protonmail.com
+
+
+# ─────────────────────────────────────────────────────
+# SECCIÓN 4: EMAILS INVÁLIDOS - DEBEN SER RECHAZADOS
+# (denylist, formato incorrecto, dominios de prueba)
+# ─────────────────────────────────────────────────────
+
+user@localhost
+test@example.com
+admin@test.org
+developer@127.0.0.1
+noreply@invalid
+contact@local
+email@dominio
+simple
+@nodomain.com
+username@
+
+
+# ─────────────────────────────────────────────────────
+# SECCIÓN 5: CASOS REALES MIXTOS
+# (líneas con múltiples emails, formatos variados)
+# ─────────────────────────────────────────────────────
+
+CSV: juan@empresa.com,maria@company.co,carlos@portal.net
+JSON: {"email": "laura@gmail.com", "backup": "laura.t@yahoo.com"}
+Log: [2024-01-15] User contact@support.com requested password reset
+Query: SELECT * FROM users WHERE email='pedro@database.org'
+Headers: From: sender@origin.com To: receiver@destination.com

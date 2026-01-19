@@ -1,0 +1,69 @@
+{
+  "usuarios": [
+    {
+      "id": 1001,
+      "nombre": "Juan Pérez",
+      "email": "juan.perez@empresa.com",
+      "telefono": "3001234567",
+      "rol": "administrador",
+      "activo": true
+    },
+    {
+      "id": 1002,
+      "nombre": "María Rodríguez",
+      "email": "maria.rodriguez@company.co",
+      "telefono": "3109876543",
+      "rol": "usuario",
+      "activo": true
+    },
+    {
+      "id": 1003,
+      "nombre": "Carlos Gómez",
+      "email": "carlos.gomez+notifications@portal.net",
+      "telefono": "3201122334",
+      "rol": "editor",
+      "activo": false
+    },
+    {
+      "id": 1004,
+      "nombre": "Laura Torres",
+      "email": "laura.torres@gmail.com",
+      "telefono": "3156677889",
+      "rol": "usuario",
+      "activo": true
+    },
+    {
+      "id": 1005,
+      "nombre": "Diego Sánchez",
+      "email": "diego.sanchez@hotmail.com",
+      "telefono": "3187788990",
+      "rol": "usuario",
+      "activo": true
+    }
+  ],
+  "configuracion": {
+    "email_notificaciones": "notificaciones@empresa.com",
+    "email_soporte": "soporte@help-desk.com",
+    "email_admin": "admin@sistema.local"
+  },
+  "registro_actividad": [
+    {
+      "timestamp": "2024-01-15T10:30:00Z",
+      "usuario": "carolina.martinez@icloud.com",
+      "accion": "login",
+      "ip": "192.168.1.100"
+    },
+    {
+      "timestamp": "2024-01-15T11:45:00Z",
+      "usuario": "andres.gomez@protonmail.com",
+      "accion": "actualizar_perfil",
+      "ip": "192.168.1.101"
+    },
+    {
+      "timestamp": "2024-01-15T14:20:00Z",
+      "usuario": "roberto.diaz@yahoo.com",
+      "accion": "logout",
+      "ip": "192.168.1.102"
+    }
+  ]
+}
