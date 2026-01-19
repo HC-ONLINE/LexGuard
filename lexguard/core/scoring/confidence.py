@@ -28,7 +28,7 @@ class ConfidenceScorer:
         "CREDIT_CARD": 0.70,
         "CEDULA_CO": 0.60,
         "PHONE_CO": 0.55,
-        "EMAIL": 0.50,
+        "EMAIL": 0.70,
     }
 
     # Pesos de validadores

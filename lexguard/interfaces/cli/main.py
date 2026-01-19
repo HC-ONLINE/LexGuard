@@ -11,6 +11,7 @@ from lexguard.core.scanner import Scanner
 from lexguard.core.rules.credit_card import CreditCardRule
 from lexguard.core.rules.cedula_co import CedulaCORule
 from lexguard.core.rules.phone_co import PhoneCORule
+from lexguard.core.rules.email import EmailRule
 from lexguard.core.reporting.json_report import ReportGenerator
 from lexguard.interfaces.cli.report_formats import OutputFormat
 
@@ -94,6 +95,7 @@ def scan(
         CreditCardRule(),
         CedulaCORule(),
         PhoneCORule(),
+        EmailRule(),
         # Añadir más reglas según se implementen
     ]
     scanner = Scanner(rules)
