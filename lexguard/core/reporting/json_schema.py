@@ -106,6 +106,20 @@ class SummarySchema(BaseModel):
     medium_risk_count: int = Field(..., ge=0)
     low_risk_count: int = Field(..., ge=0)
 
+    # Overall risk
+    overall_risk: Literal["LOW", "MEDIUM", "HIGH"] = Field(
+        default="LOW", description="Riesgo general agregado"
+    )
+
+    # Cross-PII exposure
+    exposure_level: Literal["SINGLE", "COMBINED", "CRITICAL"] = Field(
+        default="SINGLE",
+        description="Nivel de exposición por coexistencia de tipos de PII",
+    )
+    pii_types_detected: list[str] = Field(
+        default_factory=list, description="Tipos de PII detectados en el escaneo"
+    )
+
     # By type
     findings_by_type: dict[str, int] = Field(
         default_factory=dict, description="Count per PII type"

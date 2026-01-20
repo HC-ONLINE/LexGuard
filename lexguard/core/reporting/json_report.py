@@ -4,6 +4,7 @@ Utilidades de generación de reportes y enmascaramiento.
 
 from datetime import datetime
 from lexguard.core.rules.base import Finding
+from lexguard.core.scoring.risk import RiskAggregator
 from lexguard.core.reporting.json_schema import (
     ScanReportSchema,
     MetadataSchema,
@@ -107,6 +108,17 @@ class ReportGenerator:
             pii_type = finding.candidate.pii_type
             by_type[pii_type] = by_type.get(pii_type, 0) + 1
 
+        # Calculate cross-PII exposure
+        candidates = [f.candidate for f in findings]
+        exposure = RiskAggregator.calculate_exposure(candidates)
+        pii_types = sorted(set(f.candidate.pii_type for f in findings))
+
+        # Calculate overall risk (with exposure adjustment)
+        findings_with_risk = [(f.candidate, f.risk) for f in findings]
+        overall_risk = RiskAggregator.calculate_overall_risk(
+            findings_with_risk, exposure
+        )
+
         return SummarySchema(
             total_files_scanned=total_files,
             total_lines_scanned=total_lines,
@@ -117,6 +129,9 @@ class ReportGenerator:
             high_risk_count=high_risk,
             medium_risk_count=medium_risk,
             low_risk_count=low_risk,
+            overall_risk=overall_risk,
+            exposure_level=exposure.value,
+            pii_types_detected=pii_types,
             findings_by_type=by_type,
             scan_duration_seconds=round(duration, 2),
         )
@@ -143,6 +158,13 @@ class ReportGenerator:
             f"- **Archivos Escaneados:** {report.summary.total_files_scanned}",
             f"- **Líneas Escaneadas:** {report.summary.total_lines_scanned:,}",
             f"- **Total Hallazgos:** {report.summary.total_findings}",
+            "",
+            "### Evaluación de Riesgo",
+            "",
+            f"- **Riesgo General:** {report.summary.overall_risk}",
+            f"- **Exposición Cross-PII:** {report.summary.exposure_level}",
+            f"""- **Tipos de PII Detectados:**
+            {', '.join(report.summary.pii_types_detected)}""",
             "",
             "### Por Clasificación",
             "",
