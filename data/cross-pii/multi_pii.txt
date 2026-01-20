@@ -1,0 +1,14 @@
+# Archivo de prueba multi-PII para validar cross-PII exposure
+
+# EMAIL + PHONE → COMBINED
+Contacto: juan.perez@empresa.com
+Teléfono: 3001234567
+
+# EMAIL + PHONE + CEDULA → CRITICAL
+Usuario: maria.rodriguez@company.co
+Cédula: 1234567890
+Celular: 3109876543
+
+# Tarjeta + Email
+Card: 4532123456780366
+Email: support@company.com

@@ -1,0 +1,9 @@
+# Prueba CRITICAL exposure (≥3 tipos de PII)
+
+# EMAIL + PHONE + CEDULA → CRITICAL
+Email de contacto: laura.martinez@company.co
+Teléfono celular: 3156789012
+Cédula de ciudadanía: 9876543210
+
+# Otra línea con mezcla
+Usuario: diego@empresa.com, Tel: 3001234567, CC: 1234567890
