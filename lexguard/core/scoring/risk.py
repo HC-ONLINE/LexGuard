@@ -4,12 +4,28 @@ Asigna niveles de riesgo operacional basándose en tipo de PII,
 contexto y ubicación del archivo.
 """
 
+from enum import Enum
 from typing import Literal, Sequence
 from pathlib import Path
 from lexguard.core.rules.base import Candidate
 
 
 RiskLevel = Literal["LOW", "MEDIUM", "HIGH"]
+
+
+class ExposureLevel(Enum):
+    """
+    Nivel de exposición por coexistencia de tipos distintos de PII.
+
+    Cross-PII: Riesgo incrementado cuando múltiples tipos de PII
+    aparecen en el mismo scope (archivo o ejecución).
+
+    No es agregación simple, es correlación de exposición.
+    """
+
+    SINGLE = "SINGLE"  # Solo 1 tipo de PII presente
+    COMBINED = "COMBINED"  # 2 tipos distintos de PII
+    CRITICAL = "CRITICAL"  # ≥3 tipos distintos de PII
 
 
 class RiskScorer:
@@ -227,11 +243,55 @@ class RiskAggregator:
     """
     Agregar riesgo a través de múltiples hallazgos.
     Útil para reportes y decisiones de CI/CD.
+
+    Capacidades:
+    - Riesgo general (máximo entre hallazgos)
+    - Exposición cross-PII (coexistencia de tipos distintos)
+    - Agrupación por nivel de riesgo
     """
+
+    @staticmethod
+    def calculate_exposure(findings: Sequence[Candidate]) -> ExposureLevel:
+        """
+        Calcular nivel de exposición por coexistencia de tipos de PII.
+
+        Cross-PII: Riesgo incrementado cuando múltiples tipos distintos
+        de PII coexisten en el mismo scope.
+
+        Regla explícita:
+        - 1 tipo de PII → SINGLE
+        - 2 tipos distintos → COMBINED
+        - ≥3 tipos distintos → CRITICAL
+
+        Args:
+            findings: Lista de candidatos detectados
+
+        Returns:
+            Nivel de exposición
+
+        Ejemplo:
+            Solo EMAIL → SINGLE
+            EMAIL + PHONE → COMBINED
+            EMAIL + PHONE + CEDULA → CRITICAL
+        """
+        if not findings:
+            return ExposureLevel.SINGLE
+
+        # Extraer tipos únicos de PII
+        pii_types = {f.pii_type for f in findings}
+
+        # Aplicar regla explícita
+        if len(pii_types) >= 3:
+            return ExposureLevel.CRITICAL
+        if len(pii_types) == 2:
+            return ExposureLevel.COMBINED
+
+        return ExposureLevel.SINGLE
 
     @staticmethod
     def calculate_overall_risk(
         findings: Sequence[tuple[Candidate | None, RiskLevel | str]],
+        exposure: ExposureLevel | None = None,
     ) -> RiskLevel:
         """
         Calcular riesgo general desde múltiples hallazgos.
@@ -241,8 +301,15 @@ class RiskAggregator:
         - Cualquier MEDIUM (sin HIGH) → general MEDIUM
         - Todos LOW → general LOW
 
+        Ajuste por exposición cross-PII:
+        - COMBINED eleva MEDIUM → HIGH
+        - CRITICAL eleva MEDIUM → HIGH
+        - Nunca baja el riesgo
+        - HIGH no se eleva más (ya es máximo)
+
         Args:
             findings: Lista de tuplas (candidate, risk)
+            exposure: Nivel de exposición cross-PII (opcional)
 
         Returns:
             Nivel de riesgo general
@@ -252,12 +319,22 @@ class RiskAggregator:
 
         risks = [risk for _, risk in findings]
 
+        # Calcular riesgo base (sin considerar exposure)
+        base_risk: RiskLevel
         if "HIGH" in risks:
-            return "HIGH"
+            base_risk = "HIGH"
         elif "MEDIUM" in risks:
-            return "MEDIUM"
+            base_risk = "MEDIUM"
         else:
-            return "LOW"
+            base_risk = "LOW"
+
+        # Aplicar ajuste por exposición cross-PII (solo eleva, nunca baja)
+        if exposure and base_risk == "MEDIUM":
+            if exposure in (ExposureLevel.COMBINED, ExposureLevel.CRITICAL):
+                # MEDIUM + cross-PII → HIGH
+                return "HIGH"
+
+        return base_risk
 
     @staticmethod
     def group_by_risk(
