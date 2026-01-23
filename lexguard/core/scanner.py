@@ -3,11 +3,12 @@ Motor del scanner que orquesta detección, validación y puntuación.
 """
 
 from pathlib import Path
-from typing import Iterator, Sequence
+from typing import Iterator, Sequence, Optional
 from lexguard.core.ingestion.file_stream import FileStream
 from lexguard.core.rules.base import DetectionRule, Candidate, Finding
 from lexguard.core.scoring.confidence import ConfidenceScorer
 from lexguard.core.scoring.risk import RiskScorer
+from lexguard.ai.classifier import AIClassifier
 
 
 class Scanner:
@@ -19,22 +20,29 @@ class Scanner:
     2. Aplicación de reglas (detección)
     3. Puntuación de confianza
     4. Evaluación de riesgo
-    5. Generación de hallazgos
+    5. Clasificación IA (opcional, solo zona gris)
+    6. Generación de hallazgos
     """
 
-    def __init__(self, rules: Sequence[DetectionRule]):
+    def __init__(self, rules: Sequence[DetectionRule], enable_ai: bool = False):
         """
         Args:
             rules: List of detection rules to apply
+            enable_ai: Habilitar clasificador de IA para zona gris
         """
         self.rules = rules
         self.file_stream = FileStream()
         self.confidence_scorer = ConfidenceScorer()
         self.risk_scorer = RiskScorer()
+        self.enable_ai = enable_ai
+        self.ai_classifier: Optional[AIClassifier] = (
+            AIClassifier() if enable_ai else None
+        )
 
         # Estadísticas
         self.total_files = 0
         self.total_lines = 0
+        self.ai_classifications = 0
 
     def scan_path(self, path: Path, recursive: bool = True) -> Iterator[Finding]:
         """
@@ -91,12 +99,25 @@ class Scanner:
             candidate: Candidato de PII
 
         Returns:
-            Finding con puntajes
+            Finding con puntajes y clasificación IA (si aplica)
         """
         # Calcular confianza
         confidence, classification, conf_reasons = self.confidence_scorer.score(
             candidate
         )
+
+        # Clasificación con IA (solo si está habilitada y en zona gris)
+        ai_result = None
+        if (
+            self.enable_ai
+            and self.ai_classifier
+            and AIClassifier.should_use_ai(confidence)
+        ):
+            ai_result = self.ai_classifier.classify(
+                snippet=candidate.line_context, pii_type=candidate.pii_type
+            )
+            if ai_result:
+                self.ai_classifications += 1
 
         # Calcular riesgo
         risk, risk_reasons = self.risk_scorer.score(candidate, confidence)
@@ -108,8 +129,15 @@ class Scanner:
             risk=risk,
             confidence_reasons=conf_reasons,
             risk_reasons=risk_reasons,
+            ai_result=ai_result,
         )
 
     def get_statistics(self) -> dict[str, int]:
         """Obtener estadísticas de escaneo"""
-        return {"total_files": self.total_files, "total_lines": self.total_lines}
+        stats = {
+            "total_files": self.total_files,
+            "total_lines": self.total_lines,
+        }
+        if self.enable_ai:
+            stats["ai_classifications"] = self.ai_classifications
+        return stats
