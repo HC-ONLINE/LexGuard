@@ -3,7 +3,7 @@ Clases base y modelos para reglas de detección de PII.
 """
 
 from dataclasses import dataclass, field
-from typing import Literal
+from typing import Literal, Optional, Any
 from abc import ABC, abstractmethod
 
 
@@ -51,6 +51,9 @@ class Finding:
     # Justificación para el scoring
     confidence_reasons: list[str] = field(default_factory=list)
     risk_reasons: list[str] = field(default_factory=list)
+
+    # Clasificación auxiliar de IA (opcional)
+    ai_result: Optional[Any] = None  # AIResult cuando está habilitada
 
 
 class DetectionRule(ABC):
