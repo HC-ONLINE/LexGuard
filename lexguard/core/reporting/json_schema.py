@@ -4,7 +4,7 @@ Proporciona formato de salida fuertemente tipado y versionado.
 """
 
 from datetime import datetime
-from typing import Literal, Any
+from typing import Literal, Any, Optional
 from pathlib import Path
 from pydantic import BaseModel, Field, field_validator
 
@@ -68,6 +68,17 @@ class FindingSchema(BaseModel):
     )
     context_hits: list[str] = Field(
         default_factory=list, description="Positive context keywords found"
+    )
+
+    # AI classification (optional)
+    ai_assisted: bool = Field(
+        default=False, description="Whether AI was used for classification"
+    )
+    ai_sensitive: Optional[bool] = Field(
+        default=None, description="AI classification result (if assisted)"
+    )
+    ai_reason: Optional[str] = Field(
+        default=None, description="AI classification reason (if assisted)"
     )
 
     model_config = {

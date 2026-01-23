@@ -70,6 +70,11 @@ class ReportGenerator:
 
     def _finding_to_schema(self, finding: Finding) -> FindingSchema:
         """Convertir Finding a esquema"""
+        # Extraer información de IA si existe
+        ai_assisted = finding.ai_result is not None
+        ai_sensitive = finding.ai_result.is_sensitive if finding.ai_result else None
+        ai_reason = finding.ai_result.reason if finding.ai_result else None
+
         return FindingSchema(
             pii_type=finding.candidate.pii_type,
             classification=finding.classification,
@@ -82,6 +87,9 @@ class ReportGenerator:
             risk_reasons=finding.risk_reasons,
             validators_passed=finding.candidate.validators_passed,
             context_hits=finding.candidate.context_hits,
+            ai_assisted=ai_assisted,
+            ai_sensitive=ai_sensitive,
+            ai_reason=ai_reason,
         )
 
     def _generate_summary(
