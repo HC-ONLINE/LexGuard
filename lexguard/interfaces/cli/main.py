@@ -71,6 +71,11 @@ def scan(
     recursive: bool = typer.Option(
         True, "--recursive", "-r", help="Buscar recursivamente en subdirectorios"
     ),
+    enable_ai: bool = typer.Option(
+        False,
+        "--enable-ai",
+        help="Habilitar clasificador de IA para zona gris (requiere API disponible)",
+    ),
 ):
     """
     Escanear archivos en busca de PII colombiana.
@@ -88,6 +93,9 @@ def scan(
 
         # Ajustar umbral de confianza
         lexguard scan ./code --confidence-threshold 0.9
+
+        # Habilitar clasificación con IA
+        lexguard scan ./data --enable-ai
     """
 
     # Inicializar scanner con reglas
@@ -98,7 +106,7 @@ def scan(
         EmailRule(),
         # Añadir más reglas según se implementen
     ]
-    scanner = Scanner(rules)
+    scanner = Scanner(rules, enable_ai=enable_ai)
 
     # Inicializar generador de reportes
     report_gen = ReportGenerator(
@@ -107,6 +115,8 @@ def scan(
 
     typer.echo(f"Escaneando: {path}")
     typer.echo(f"Umbral de confianza: {confidence_threshold}")
+    if enable_ai:
+        typer.echo("Clasificador IA: HABILITADO")
     typer.echo("")
 
     # Escanear y recolectar hallazgos
