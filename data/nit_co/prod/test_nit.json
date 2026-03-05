@@ -1,0 +1,8 @@
+[
+  {"empresa": "Empresa ABC", "comentario": "NIT 800.197.268-4", "nit": "800197268-4"},
+  {"empresa": "Constructora XYZ", "comentario": "RUT: 901.234.567-7", "nit": "901234567-7"},
+  {"empresa": "Logistica SA", "comentario": "nit 900.456.789-4", "nit": "900456789-4"},
+  {"empresa": "Comercial LTD", "comentario": "NIT: 700.456.789-9", "nit": "700456789-9"},
+  {"empresa": "Invalido", "comentario": "nit 123456789-0", "nit": "123456789-0"},
+  {"empresa": "NoMatch", "comentario": "numero 987654321-1", "nit": "987654321-1"}
+]
