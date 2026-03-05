@@ -58,6 +58,13 @@ class RiskScorer:
         "purchase",
         "pago",
         "transaccion",
+        # Fiscal / tributario (NIT/RUT en contextos operacionales)
+        "factura",
+        "invoice",
+        "fiscal",
+        "tributaria",
+        "tributario",
+        "dian",
     }
 
     # Contexto CRÍTICO (señales que valen por sí solas → HIGH siempre)

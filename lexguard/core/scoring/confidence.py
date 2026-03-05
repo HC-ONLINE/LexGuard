@@ -29,6 +29,7 @@ class ConfidenceScorer:
         "CEDULA_CO": 0.60,
         "PHONE_CO": 0.55,
         "EMAIL": 0.70,
+        "NIT_CO": 0.65,
     }
 
     # Pesos de validadores
@@ -41,6 +42,11 @@ class ConfidenceScorer:
         "prefix_valid": 0.15,  # Prefijo móvil colombiano
         "length_valid": 0.05,
         "format_valid": 0.05,
+        # NIT/RUT
+        "check_digit_dian": 0.20,  # Dígito verificador oficial DIAN
+        "first_digit": 0.02,
+        "not_trivial": 0.03,
+        "length": 0.02,
     }
 
     # Ajustes de contexto
